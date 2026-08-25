@@ -1,0 +1,8 @@
+services:
+  image-to-webp:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      API_KEY: ${API_KEY}
+    restart: unless-stopped

@@ -1,0 +1,16 @@
+{
+  "name": "image-to-webp",
+  "version": "1.0.0",
+  "description": "Servico que converte imagens para WebP (qualidade 75%)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "fastify": "^4.29.1",
+    "sharp": "^0.33.5"
+  }
+}
