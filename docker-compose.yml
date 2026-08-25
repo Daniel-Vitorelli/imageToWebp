@@ -1,8 +1,26 @@
 services:
   image-to-webp:
     build: .
-    ports:
-      - "3000:3000"
+    image: image-to-webp:local
     environment:
-      API_KEY: ${API_KEY}
+      - API_KEY=${API_KEY}
+      - BASE_PATH=/webp
+    networks:
+      - net
     restart: unless-stopped
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.services.imagetowebp-service.loadbalancer.server.port=3000"
+
+        # HTTPS via Let's Encrypt
+        - "traefik.http.routers.imagetowebp-main.rule=Host(`ai-equinox.com`) && PathPrefix(`/webp`)"
+        - "traefik.http.routers.imagetowebp-main.entrypoints=websecure"
+        - "traefik.http.routers.imagetowebp-main.tls=true"
+        - "traefik.http.routers.imagetowebp-main.tls.certresolver=letsencryptresolver"
+        - "traefik.http.routers.imagetowebp-main.service=imagetowebp-service"
+
+networks:
+  net:
+    external: true

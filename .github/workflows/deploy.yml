@@ -1,0 +1,35 @@
+name: Deploy Automático 
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login no GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Converter nome do repositório para minúsculas
+        run: echo "REPO_LOWER=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+
+      - name: Build e Push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ env.REPO_LOWER }}:latest
+
+      - name: Disparar Webhook do Portainer
+        run: curl -X POST ${{ secrets.PORTAINER_WEBHOOK }}
