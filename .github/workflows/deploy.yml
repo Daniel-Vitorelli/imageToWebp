@@ -31,5 +31,5 @@ jobs:
           push: true
           tags: ghcr.io/${{ env.REPO_LOWER }}:latest
 
-      - name: Disparar Webhook do Portainer
-        run: curl -X POST ${{ secrets.PORTAINER_WEBHOOK }}
+      # - name: Disparar Webhook do Portainer
+      #   run: curl -X POST ${{ secrets.PORTAINER_WEBHOOK }}
