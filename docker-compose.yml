@@ -1,6 +1,5 @@
 services:
   image-to-webp:
-    build: .
     image: ghcr.io/daniel-vitorelli/imagetowebp:latest
     environment:
       - API_KEY=${API_KEY}
