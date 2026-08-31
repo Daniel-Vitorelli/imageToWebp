@@ -48,11 +48,17 @@ app.register(
         return reply.code(400).send({ error: 'Envie os bytes da imagem no corpo da requisicao' });
       }
 
+      const width = Number(request.query.width);
+      const height = Number(request.query.height);
+
       try {
-        const output = await sharp(input)
-          .rotate()
-          .webp({ quality: 75 })
-          .toBuffer();
+        let pipeline = sharp(input).rotate();
+
+        if (width > 0 && height > 0) {
+          pipeline = pipeline.resize(width, height, { fit: 'cover', position: 'centre' });
+        }
+
+        const output = await pipeline.webp({ quality: 75 }).toBuffer();
 
         reply
           .code(200)
